@@ -1,0 +1,41 @@
+{
+    "name": "roadiz/user-bundle",
+    "license": "MIT",
+    "keywords": [
+        "cms",
+        "backoffice",
+        "rezo zero"
+    ],
+    "authors": [
+        {
+            "name": "Ambroise Maupate",
+            "email": "ambroise@roadiz.io",
+            "homepage": "https://www.roadiz.io",
+            "role": "Lead developer"
+        }
+    ],
+    "type": "symfony-bundle",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.4",
+        "symfony/framework-bundle": "5.4.*"
+    },
+    "require-dev": {
+        "roadiz/core-bundle": "*",
+        "php-coveralls/php-coveralls": "^2.4",
+        "phpstan/phpstan": "^1.5.3",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "RZ\\Roadiz\\UserBundle\\": "src/"
+        }
+    }
+}
