@@ -18,5 +18,11 @@ class RoadizUserExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(dirname(__DIR__) . '/../config'));
         $loader->load('services.yaml');
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('roadiz_user.password_reset_url', $config['password_reset_url']);
+        $container->setParameter('roadiz_user.password_reset_expires_in', $config['password_reset_expires_in']);
     }
 }

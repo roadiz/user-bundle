@@ -18,7 +18,9 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.4",
-        "symfony/framework-bundle": "5.4.*"
+        "symfony/framework-bundle": "5.4.*",
+        "symfony/rate-limiter": "5.4.*",
+        "doctrine/orm": "^2.12.2"
     },
     "require-dev": {
         "roadiz/core-bundle": "*",

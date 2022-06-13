@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace RZ\Roadiz\UserBundle\Controller;
 
+use RZ\Roadiz\CoreBundle\Entity\User;
+
 final class PasswordResetController
 {
-    public function __invoke()
+    public function __invoke(User $data): User
     {
-        // TODO: Implement __invoke() method.
+        return $data;
     }
 }

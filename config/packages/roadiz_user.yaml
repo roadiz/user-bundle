@@ -1,0 +1,7 @@
+parameters:
+    env(USER_PASSWORD_RESET_URL): 'loginResetPage'
+    env(USER_PASSWORD_RESET_EXPIRES_IN): '600'
+
+roadiz_user:
+    password_reset_url: '%env(string:USER_PASSWORD_RESET_URL)%'
+    password_reset_expires_in: '%env(int:USER_PASSWORD_RESET_EXPIRES_IN)%'

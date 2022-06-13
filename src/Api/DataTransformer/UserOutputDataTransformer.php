@@ -13,7 +13,7 @@ final class UserOutputDataTransformer implements DataTransformerInterface
     /**
      * @inheritDoc
      */
-    public function transform($object, string $to, array $context = [])
+    public function transform($object, string $to, array $context = []): UserOutput
     {
         if (!$object instanceof UserInterface) {
             throw new \RuntimeException(sprintf('Cannot transform %s to %s', get_class($object), $to));
@@ -21,6 +21,7 @@ final class UserOutputDataTransformer implements DataTransformerInterface
         $userOutput = new UserOutput();
         $userOutput->identifier = $object->getUserIdentifier();
         $userOutput->roles = $object->getRoles();
+        $userOutput->emailValidated = \in_array('ROLE_EMAIL_VALIDATED', $object->getRoles());
         return $userOutput;
     }
 
