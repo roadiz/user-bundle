@@ -6,5 +6,4 @@ namespace RZ\Roadiz\UserBundle\Api\Dto;
 
 final class VoidOutput
 {
-
 }
