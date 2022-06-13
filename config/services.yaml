@@ -12,3 +12,9 @@ services:
             - '../src/Entity/'
             - '../src/Tests/'
             - '../src/Event/'
+
+    RZ\Roadiz\UserBundle\Controller\:
+        resource: '../src/Controller/'
+        autowire: true
+        autoconfigure: true
+        tags: ['controller.service_arguments']

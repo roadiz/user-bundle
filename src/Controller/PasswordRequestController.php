@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace src\Controller;
+namespace RZ\Roadiz\UserBundle\Controller;
 
 final class PasswordRequestController
 {

@@ -2,12 +2,9 @@
 
 declare(strict_types=1);
 
-namespace src\Controller;
+namespace RZ\Roadiz\UserBundle\Controller;
 
 final class SignupController
 {
-    public function __invoke()
-    {
-        // TODO: Implement __invoke() method.
-    }
+
 }
