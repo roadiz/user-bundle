@@ -93,7 +93,6 @@ USER_PASSWORD_RESET_EXPIRES_IN=600
 USER_VALIDATION_EXPIRES_IN=3600
 ```
 
-
 ## Maintenance commands
 
 - `bin/console users:purge-validation-tokens`: Delete all expired user validation tokens
