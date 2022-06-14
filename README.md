@@ -87,8 +87,10 @@ security:
 ```
 - Edit your `./.env` file with:
 ```dotenv
-USER_PASSWORD_RESET_URL=https://your-public-reset-url.test
+USER_PASSWORD_RESET_URL=https://your-public-url.test/reset
+USER_VALIDATION_URL=https://your-public-url.test/validate
 USER_PASSWORD_RESET_EXPIRES_IN=600
+USER_VALIDATION_EXPIRES_IN=3600
 ```
 
 

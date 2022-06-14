@@ -23,6 +23,10 @@ class RoadizUserExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('roadiz_user.password_reset_url', $config['password_reset_url']);
+        $container->setParameter('roadiz_user.user_validation_url', $config['user_validation_url']);
         $container->setParameter('roadiz_user.password_reset_expires_in', $config['password_reset_expires_in']);
+        $container->setParameter('roadiz_user.user_validation_expires_in', $config['user_validation_expires_in']);
+        $container->setParameter('roadiz_user.public_user_role_name', $config['public_user_role_name']);
+        $container->setParameter('roadiz_user.email_validated_role_name', $config['email_validated_role_name']);
     }
 }

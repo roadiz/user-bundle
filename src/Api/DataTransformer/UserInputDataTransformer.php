@@ -13,13 +13,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class UserInputDataTransformer implements DataTransformerInterface
 {
     private Roles $rolesBag;
+    private string $publicUserRoleName;
 
-    /**
-     * @param Roles $rolesBag
-     */
-    public function __construct(Roles $rolesBag)
+    public function __construct(Roles $rolesBag, string $publicUserRoleName)
     {
         $this->rolesBag = $rolesBag;
+        $this->publicUserRoleName = $publicUserRoleName;
     }
 
     public function transform($object, string $to, array $context = []): User
@@ -34,7 +33,7 @@ final class UserInputDataTransformer implements DataTransformerInterface
         $user->setFirstName($object->firstName);
         $user->setLastName($object->lastName);
         $user->setPlainPassword($object->clearPassword);
-        $user->addRoleEntity($this->rolesBag->get('ROLE_PUBLIC_USER'));
+        $user->addRoleEntity($this->rolesBag->get($this->publicUserRoleName));
         $user->sendCreationConfirmationEmail(true);
 
         return $user;
