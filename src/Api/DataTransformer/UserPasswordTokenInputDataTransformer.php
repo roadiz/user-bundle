@@ -72,7 +72,7 @@ final class UserPasswordTokenInputDataTransformer implements DataTransformerInte
                 throw new UnprocessableEntityHttpException('Token is not valid anymore.');
             }
 
-            $user->setPlainPassword($object->clearPassword);
+            $user->setPlainPassword($object->plainPassword);
             $user->setPasswordRequestedAt(null);
             $user->setConfirmationToken(null);
             return $user;

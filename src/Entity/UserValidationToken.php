@@ -25,7 +25,7 @@ class UserValidationToken
     /**
      * @var User|null
      * @ORM\ManyToOne(targetEntity="RZ\Roadiz\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=true)
+     * @ORM\JoinColumn(name="user_id", nullable=true, onDelete="CASCADE")
      */
     private ?User $user = null;
     /**

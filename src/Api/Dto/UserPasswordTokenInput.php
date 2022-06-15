@@ -6,6 +6,6 @@ namespace RZ\Roadiz\UserBundle\Api\Dto;
 
 final class UserPasswordTokenInput
 {
-    public string $token;
-    public string $clearPassword;
+    public string $token = '';
+    public string $plainPassword = '';
 }

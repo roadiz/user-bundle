@@ -6,7 +6,7 @@ namespace RZ\Roadiz\UserBundle\Api\Dto;
 
 final class UserOutput
 {
-    public string $identifier;
-    public array $roles;
+    public string $identifier = '';
+    public array $roles = [];
     public bool $emailValidated = false;
 }

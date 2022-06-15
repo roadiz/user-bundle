@@ -6,5 +6,5 @@ namespace RZ\Roadiz\UserBundle\Api\Dto;
 
 final class UserPasswordRequestInput
 {
-    public string $identifier;
+    public string $identifier = '';
 }

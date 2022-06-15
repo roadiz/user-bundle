@@ -6,5 +6,5 @@ namespace RZ\Roadiz\UserBundle\Api\Dto;
 
 final class UserTokenInput
 {
-    public string $token;
+    public string $token = '';
 }
