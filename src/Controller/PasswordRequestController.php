@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use RZ\Roadiz\CoreBundle\Bag\Settings;
 use RZ\Roadiz\CoreBundle\Entity\User;
+use RZ\Roadiz\CoreBundle\Form\Constraint\RecaptchaServiceInterface;
 use RZ\Roadiz\CoreBundle\Mailer\EmailManager;
 use RZ\Roadiz\Random\TokenGenerator;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PasswordRequestController
 {
+    use RecaptchaProtectedControllerTrait;
+
     private LoggerInterface $logger;
     private RateLimiterFactory $passwordRequestLimiter;
     private ManagerRegistry $managerRegistry;
@@ -27,7 +30,9 @@ final class PasswordRequestController
     private Settings $settingsBag;
     private TranslatorInterface $translator;
     private UrlGeneratorInterface $urlGenerator;
+    private RecaptchaServiceInterface $recaptchaService;
     private string $passwordResetUrl;
+    private string $recaptchaHeaderName;
 
     public function __construct(
         LoggerInterface $logger,
@@ -37,7 +42,9 @@ final class PasswordRequestController
         Settings $settingsBag,
         TranslatorInterface $translator,
         UrlGeneratorInterface $urlGenerator,
-        string $passwordResetUrl
+        RecaptchaServiceInterface $recaptchaService,
+        string $passwordResetUrl,
+        string $recaptchaHeaderName = 'x-g-recaptcha-response'
     ) {
         $this->logger = $logger;
         $this->passwordRequestLimiter = $passwordRequestLimiter;
@@ -47,6 +54,23 @@ final class PasswordRequestController
         $this->settingsBag = $settingsBag;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
+        $this->recaptchaService = $recaptchaService;
+        $this->recaptchaHeaderName = $recaptchaHeaderName;
+    }
+
+    protected function getRecaptchaService(): RecaptchaServiceInterface
+    {
+        return $this->recaptchaService;
+    }
+
+    protected function getSettingsBag(): Settings
+    {
+        return $this->settingsBag;
+    }
+
+    protected function getRecaptchaHeaderName(): string
+    {
+        return $this->recaptchaHeaderName;
     }
 
     public function __invoke(Request $request, ?User $data): User
@@ -56,6 +80,8 @@ final class PasswordRequestController
         if (false === $limit->isAccepted()) {
             throw new TooManyRequestsHttpException($limit->getRetryAfter()->getTimestamp());
         }
+
+        $this->validateRecaptchaHeader($request);
 
         /*
          * Do not output anything if user exists or not to prevent search attacks.
