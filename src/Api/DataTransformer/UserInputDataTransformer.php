@@ -32,6 +32,10 @@ final class UserInputDataTransformer implements DataTransformerInterface
         $user->setUsername($object->email);
         $user->setFirstName($object->firstName);
         $user->setLastName($object->lastName);
+        $user->setPhone($object->phone);
+        $user->setCompany($object->company);
+        $user->setJob($object->job);
+        $user->setBirthday($object->birthday);
         $user->setPlainPassword($object->plainPassword);
         $user->addRoleEntity($this->rolesBag->get($this->publicUserRoleName));
         $user->sendCreationConfirmationEmail(true);
