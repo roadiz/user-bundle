@@ -92,6 +92,16 @@ USER_VALIDATION_URL=https://your-public-url.test/validate
 USER_PASSWORD_RESET_EXPIRES_IN=600
 USER_VALIDATION_EXPIRES_IN=3600
 ```
+- Update your CORS configuration with additional headers `Www-Authenticate` and `x-g-recaptcha-response`:
+```yaml
+# config/packages/nelmio_cors.yaml
+nelmio_cors:
+    defaults:
+        # ...
+        allow_headers: ['Content-Type', 'Authorization', 'Www-Authenticate', 'x-g-recaptcha-response']
+        expose_headers: ['Link', 'Www-Authenticate']
+```
+
 
 ## Maintenance commands
 
