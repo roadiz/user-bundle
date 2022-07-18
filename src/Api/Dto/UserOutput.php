@@ -14,6 +14,7 @@ final class UserOutput
     public ?string $company = null;
     public ?string $locale = null;
     public ?string $pictureUrl = null;
+    public ?array $metadata = null;
     public ?string $job = null;
     public ?\DateTime $birthday = null;
     public bool $emailValidated = false;

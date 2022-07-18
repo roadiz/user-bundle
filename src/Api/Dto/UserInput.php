@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace RZ\Roadiz\UserBundle\Api\Dto;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
 final class UserInput
 {
     public string $email = '';
@@ -16,4 +14,5 @@ final class UserInput
     public ?string $company = null;
     public ?string $job = null;
     public ?\DateTime $birthday = null;
+    public ?array $metadata = null;
 }

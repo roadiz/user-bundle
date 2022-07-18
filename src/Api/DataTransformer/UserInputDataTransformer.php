@@ -8,17 +8,20 @@ use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use RZ\Roadiz\CoreBundle\Bag\Roles;
 use RZ\Roadiz\CoreBundle\Entity\User;
 use RZ\Roadiz\UserBundle\Api\Dto\UserInput;
+use RZ\Roadiz\UserBundle\Manager\UserMetadataManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserInputDataTransformer implements DataTransformerInterface
 {
+    private UserMetadataManagerInterface $userMetadataManager;
     private Roles $rolesBag;
     private string $publicUserRoleName;
 
-    public function __construct(Roles $rolesBag, string $publicUserRoleName)
+    public function __construct(UserMetadataManagerInterface $userMetadataManager, Roles $rolesBag, string $publicUserRoleName)
     {
         $this->rolesBag = $rolesBag;
         $this->publicUserRoleName = $publicUserRoleName;
+        $this->userMetadataManager = $userMetadataManager;
     }
 
     public function transform($object, string $to, array $context = []): User
@@ -39,6 +42,11 @@ final class UserInputDataTransformer implements DataTransformerInterface
         $user->setPlainPassword($object->plainPassword);
         $user->addRoleEntity($this->rolesBag->get($this->publicUserRoleName));
         $user->sendCreationConfirmationEmail(true);
+
+        if (null !== $object->metadata) {
+            $userMetadata = $this->userMetadataManager->createMetadataForUser($user);
+            $userMetadata->setMetadata($object->metadata);
+        }
 
         return $user;
     }

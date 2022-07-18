@@ -25,7 +25,7 @@
                     <td>
                         <p>{% trans %}validate_email.content{% endtrans %}</p>
                         <p class="aligncenter" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-                            <a class="btn-primary" href="{{ validationLink|raw }}" itemprop="url">{% trans %}validate_email.btn_label{% endtrans %}</a>
+                            <a class="btn-primary" href="{{ validationLink|escape('html_attr') }}" itemprop="url">{% trans %}validate_email.btn_label{% endtrans %}</a>
                         </p>
                         {% block content_disclaimer %}{% endblock %}
                     </td>
