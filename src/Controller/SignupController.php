@@ -75,6 +75,7 @@ final class SignupController
         $this->validateRecaptchaHeader($request);
 
         $this->validator->validate($data);
+        $data->setLocale($request->getLocale());
         $this->eventDispatcher->dispatch(new UserSignedUp($data));
 
         return $data;

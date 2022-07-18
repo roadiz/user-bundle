@@ -94,7 +94,7 @@ final class PasswordRequestController
             $tokenGenerator = new TokenGenerator($this->logger);
             $data->setPasswordRequestedAt(new \DateTime());
             $data->setConfirmationToken($tokenGenerator->generateToken());
-            $this->sendPasswordResetLink($data);
+            $this->sendPasswordResetLink($request, $data);
         } catch (\Exception $e) {
             $data->setPasswordRequestedAt(null);
             $data->setConfirmationToken(null);
@@ -108,7 +108,7 @@ final class PasswordRequestController
         return $data;
     }
 
-    private function sendPasswordResetLink(User $user): void
+    private function sendPasswordResetLink(Request $request, User $user): void
     {
         $emailContact = $this->settingsBag->get('email_sender');
         $siteName = $this->settingsBag->get('site_name');
@@ -119,10 +119,12 @@ final class PasswordRequestController
         try {
             $resetLink = $this->urlGenerator->generate($this->passwordResetUrl, [
                 'token' => $user->getConfirmationToken(),
+                '_locale' => $request->getLocale(),
             ], UrlGeneratorInterface::ABSOLUTE_URL);
         } catch (RouteNotFoundException $exception) {
             $resetLink = $this->passwordResetUrl . '?' . http_build_query([
                 'token' => $user->getConfirmationToken(),
+                '_locale' => $request->getLocale(),
             ]);
         }
 

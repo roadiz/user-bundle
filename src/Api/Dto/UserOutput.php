@@ -12,6 +12,8 @@ final class UserOutput
     public ?string $lastName = null;
     public ?string $phone = null;
     public ?string $company = null;
+    public ?string $locale = null;
+    public ?string $pictureUrl = null;
     public ?string $job = null;
     public ?\DateTime $birthday = null;
     public bool $emailValidated = false;

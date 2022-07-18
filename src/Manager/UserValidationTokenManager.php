@@ -96,10 +96,12 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
         try {
             $validationLink = $this->urlGenerator->generate($this->userValidationUrl, [
                 'token' => $userValidationToken->getToken(),
+                '_locale' => null !== $userValidationToken->getUser() ? $userValidationToken->getUser()->getLocale() : null,
             ], UrlGeneratorInterface::ABSOLUTE_URL);
         } catch (RouteNotFoundException $exception) {
             $validationLink = $this->userValidationUrl . '?' . http_build_query([
                 'token' => $userValidationToken->getToken(),
+                '_locale' => null !== $userValidationToken->getUser() ? $userValidationToken->getUser()->getLocale() : null,
             ]);
         }
 

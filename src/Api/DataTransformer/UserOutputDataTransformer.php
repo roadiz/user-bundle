@@ -6,6 +6,7 @@ namespace RZ\Roadiz\UserBundle\Api\DataTransformer;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use RZ\Roadiz\Core\AbstractEntities\AbstractHuman;
+use RZ\Roadiz\CoreBundle\Entity\User;
 use RZ\Roadiz\UserBundle\Api\Dto\UserOutput;
 use RZ\Roadiz\UserBundle\Manager\UserValidationTokenManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,6 +40,10 @@ final class UserOutputDataTransformer implements DataTransformerInterface
             $userOutput->company = $object->getCompany();
             $userOutput->job = $object->getJob();
             $userOutput->birthday = $object->getBirthday();
+        }
+        if ($object instanceof User) {
+            $userOutput->locale = $object->getLocale();
+            $userOutput->pictureUrl = $object->getPictureUrl();
         }
 
         $userOutput->emailValidated = $this->userValidationTokenManager->isUserEmailValidated($object);
