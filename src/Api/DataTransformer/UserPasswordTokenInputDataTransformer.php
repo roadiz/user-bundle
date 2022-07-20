@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RZ\Roadiz\UserBundle\Api\DataTransformer;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
+use ApiPlatform\Core\Validator\ValidatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use RZ\Roadiz\CoreBundle\Entity\User;
 use RZ\Roadiz\UserBundle\Api\Dto\UserPasswordTokenInput;
@@ -18,12 +19,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class UserPasswordTokenInputDataTransformer implements DataTransformerInterface
 {
     private ManagerRegistry $managerRegistry;
+    private ValidatorInterface $validator;
     private RateLimiterFactory $passwordResetLimiter;
     private RequestStack $requestStack;
     private int $passwordResetExpiresIn;
 
     public function __construct(
         ManagerRegistry $managerRegistry,
+        ValidatorInterface $validator,
         RateLimiterFactory $passwordResetLimiter,
         RequestStack $requestStack,
         int $passwordResetExpiresIn
@@ -32,6 +35,7 @@ final class UserPasswordTokenInputDataTransformer implements DataTransformerInte
         $this->managerRegistry = $managerRegistry;
         $this->passwordResetLimiter = $passwordResetLimiter;
         $this->requestStack = $requestStack;
+        $this->validator = $validator;
     }
 
     /**
@@ -73,6 +77,8 @@ final class UserPasswordTokenInputDataTransformer implements DataTransformerInte
             }
 
             $user->setPlainPassword($object->plainPassword);
+            $this->validator->validate($user);
+
             $user->setPasswordRequestedAt(null);
             $user->setConfirmationToken(null);
             return $user;
