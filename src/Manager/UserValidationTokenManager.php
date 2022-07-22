@@ -94,28 +94,38 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
          * Support routes name as well as hard-coded URLs
          */
         try {
-            $validationLink = $this->urlGenerator->generate($this->userValidationUrl, [
+            $validationLink = $this->urlGenerator->generate(
+                $this->userValidationUrl,
+                [
                 'token' => $userValidationToken->getToken(),
                 '_locale' => null !== $userValidationToken->getUser() ? $userValidationToken->getUser()->getLocale() : null,
-            ], UrlGeneratorInterface::ABSOLUTE_URL);
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
         } catch (RouteNotFoundException $exception) {
-            $validationLink = $this->userValidationUrl . '?' . http_build_query([
+            $validationLink = $this->userValidationUrl . '?' . http_build_query(
+                [
                 'token' => $userValidationToken->getToken(),
                 '_locale' => null !== $userValidationToken->getUser() ? $userValidationToken->getUser()->getLocale() : null,
-            ]);
+                ]
+            );
         }
 
-        $this->emailManager->setAssignation([
+        $this->emailManager->setAssignation(
+            [
             'validationLink' => $validationLink,
             'user' => $userValidationToken->getUser(),
             'site' => $siteName,
             'mailContact' => $emailContact,
-        ]);
+            ]
+        );
         $this->emailManager->setEmailTemplate('@RoadizUser/email/users/validate_email.html.twig');
         $this->emailManager->setEmailPlainTextTemplate('@RoadizUser/email/users/validate_email.txt.twig');
-        $this->emailManager->setSubject($this->translator->trans(
-            'validate_email.subject'
-        ));
+        $this->emailManager->setSubject(
+            $this->translator->trans(
+                'validate_email.subject'
+            )
+        );
         $this->emailManager->setReceiver($userValidationToken->getUser()->getEmail());
         $this->emailManager->setSender(new Address($emailContact, $siteName ?? ''));
         $this->emailManager->send();

@@ -45,11 +45,13 @@ class DoctrineMigrationCompilerPass implements CompilerPassInterface
         assert(is_array($bundleMetadata));
 
         if (! isset($bundleMetadata[$bundleName])) {
-            throw new RuntimeException(sprintf(
-                'The bundle "%s" has not been registered, available bundles: %s',
-                $bundleName,
-                implode(', ', array_keys($bundleMetadata))
-            ));
+            throw new RuntimeException(
+                sprintf(
+                    'The bundle "%s" has not been registered, available bundles: %s',
+                    $bundleName,
+                    implode(', ', array_keys($bundleMetadata))
+                )
+            );
         }
 
         return $bundleMetadata[$bundleName]['path'];

@@ -33,10 +33,10 @@ final class UserPasswordRequestInputDataTransformer implements DataTransformerIn
             $user = $this->userProvider->loadUserByIdentifier($object->identifier);
 
             if (
-                $user instanceof User &&
-                $user->isEnabled() &&
-                $user->isAccountNonExpired() &&
-                $user->isAccountNonLocked()
+                $user instanceof User
+                && $user->isEnabled()
+                && $user->isAccountNonExpired()
+                && $user->isAccountNonLocked()
             ) {
                 return $user;
             }

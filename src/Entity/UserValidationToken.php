@@ -16,25 +16,25 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class UserValidationToken
 {
     /**
-     * @var int
+     * @var                   int
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue
      * @ORM\Id
      */
     private int $id;
     /**
-     * @var User|null
+     * @var                                                            User|null
      * @ORM\ManyToOne(targetEntity="RZ\Roadiz\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id",                                 nullable=true, onDelete="CASCADE")
      */
     private ?User $user = null;
     /**
-     * @var string
+     * @var                      string
      * @ORM\Column(name="token", type="string", nullable=false, unique=true)
      */
     private string $token;
     /**
-     * @var \DateTime|null
+     * @var                                  \DateTime|null
      * @ORM\Column(name="token_valid_until", type="datetime", nullable=true, unique=false)
      */
     private ?\DateTime $tokenValidUntil = null;
@@ -48,7 +48,7 @@ class UserValidationToken
     }
 
     /**
-     * @param int $id
+     * @param  int $id
      * @return UserValidationToken
      */
     public function setId(int $id): UserValidationToken
@@ -67,7 +67,7 @@ class UserValidationToken
     }
 
     /**
-     * @param User|null $user
+     * @param  User|null $user
      * @return UserValidationToken
      */
     public function setUser(?User $user): UserValidationToken
@@ -85,7 +85,7 @@ class UserValidationToken
     }
 
     /**
-     * @param string $token
+     * @param  string $token
      * @return UserValidationToken
      */
     public function setToken(string $token): UserValidationToken
@@ -103,7 +103,7 @@ class UserValidationToken
     }
 
     /**
-     * @param \DateTime|null $tokenValidUntil
+     * @param  \DateTime|null $tokenValidUntil
      * @return UserValidationToken
      */
     public function setTokenValidUntil(?\DateTime $tokenValidUntil): UserValidationToken

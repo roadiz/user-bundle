@@ -14,7 +14,7 @@ use RZ\Roadiz\CoreBundle\Entity\User;
 class UserMetadata
 {
     /**
-     * @var int
+     * @var                   int
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue
      * @ORM\Id
@@ -22,14 +22,14 @@ class UserMetadata
     private int $id;
 
     /**
-     * @var User|null
+     * @var                                                           User|null
      * @ORM\OneToOne(targetEntity="RZ\Roadiz\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id",                                nullable=true, onDelete="CASCADE")
      */
     private ?User $user = null;
 
     /**
-     * @var array|null
+     * @var                     array|null
      * @ORM\Column(type="json", nullable=true, name="metadata")
      */
     private ?array $metadata = [];
@@ -43,7 +43,7 @@ class UserMetadata
     }
 
     /**
-     * @param int $id
+     * @param  int $id
      * @return UserMetadata
      */
     public function setId(int $id): UserMetadata
@@ -61,7 +61,7 @@ class UserMetadata
     }
 
     /**
-     * @param User|null $user
+     * @param  User|null $user
      * @return UserMetadata
      */
     public function setUser(?User $user): UserMetadata
@@ -79,7 +79,7 @@ class UserMetadata
     }
 
     /**
-     * @param array|null $metadata
+     * @param  array|null $metadata
      * @return UserMetadata
      */
     public function setMetadata(?array $metadata): UserMetadata

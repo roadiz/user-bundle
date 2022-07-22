@@ -65,9 +65,9 @@ final class UserTokenInputDataTransformer implements DataTransformerInterface
         }
 
         if (
-            $user->isEnabled() &&
-            $user->isAccountNonExpired() &&
-            $user->isAccountNonLocked()
+            $user->isEnabled()
+            && $user->isAccountNonExpired()
+            && $user->isAccountNonLocked()
         ) {
             $user->addRoleEntity($this->rolesBag->get($this->emailValidatedRoleName));
             $this->managerRegistry->getManager()->remove($userValidationToken);

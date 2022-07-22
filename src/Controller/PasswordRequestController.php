@@ -117,28 +117,38 @@ final class PasswordRequestController
          * Support routes name as well as hard-coded URLs
          */
         try {
-            $resetLink = $this->urlGenerator->generate($this->passwordResetUrl, [
+            $resetLink = $this->urlGenerator->generate(
+                $this->passwordResetUrl,
+                [
                 'token' => $user->getConfirmationToken(),
                 '_locale' => $request->getLocale(),
-            ], UrlGeneratorInterface::ABSOLUTE_URL);
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
         } catch (RouteNotFoundException $exception) {
-            $resetLink = $this->passwordResetUrl . '?' . http_build_query([
+            $resetLink = $this->passwordResetUrl . '?' . http_build_query(
+                [
                 'token' => $user->getConfirmationToken(),
                 '_locale' => $request->getLocale(),
-            ]);
+                ]
+            );
         }
 
-        $this->emailManager->setAssignation([
+        $this->emailManager->setAssignation(
+            [
             'resetLink' => $resetLink,
             'user' => $user,
             'site' => $siteName,
             'mailContact' => $emailContact,
-        ]);
+            ]
+        );
         $this->emailManager->setEmailTemplate('@RoadizUser/email/users/reset_password_email.html.twig');
         $this->emailManager->setEmailPlainTextTemplate('@RoadizUser/email/users/reset_password_email.txt.twig');
-        $this->emailManager->setSubject($this->translator->trans(
-            'reset.password.request'
-        ));
+        $this->emailManager->setSubject(
+            $this->translator->trans(
+                'reset.password.request'
+            )
+        );
         $this->emailManager->setReceiver($user->getEmail());
         $this->emailManager->setSender(new Address($emailContact, $siteName ?? ''));
         $this->emailManager->send();

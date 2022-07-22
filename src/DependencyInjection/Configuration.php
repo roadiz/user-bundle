@@ -16,38 +16,45 @@ class Configuration implements ConfigurationInterface
         $root->addDefaultsIfNotSet()
             ->children()
             ->scalarNode('password_reset_url')
-                ->defaultValue('loginResetPage')
-                ->info(<<<EOT
+            ->defaultValue('loginResetPage')
+            ->info(
+                <<<EOT
 Define frontend URL to redirect user to after receiving its password recovery email.
 **This parameter supports Symfony routes name as well as hard-coded URLs.**
-EOT)
+EOT
+            )
             ->end()
             ->scalarNode('user_validation_url')
-                ->defaultValue('http://example.test/my-account/validate')
-                ->info(<<<EOT
+            ->defaultValue('http://example.test/my-account/validate')
+            ->info(
+                <<<EOT
 Define frontend URL to redirect user to after receiving its email validation request.
 **This parameter supports Symfony routes name as well as hard-coded URLs.**
-EOT)
+EOT
+            )
             ->end()
             ->integerNode('password_reset_expires_in')
-                ->defaultValue(600)
-                ->info(<<<EOT
+            ->defaultValue(600)
+            ->info(
+                <<<EOT
 Define password recovery expiring time in seconds.
-EOT)
+EOT
+            )
             ->end()
             ->integerNode('user_validation_expires_in')
-                ->defaultValue(3600)
-                ->info(<<<EOT
+            ->defaultValue(3600)
+            ->info(
+                <<<EOT
 Define user validation token expiring time in seconds.
-EOT)
+EOT
+            )
             ->end()
             ->scalarNode('public_user_role_name')
-                ->defaultValue('ROLE_PUBLIC_USER')
+            ->defaultValue('ROLE_PUBLIC_USER')
             ->end()
             ->scalarNode('email_validated_role_name')
-                ->defaultValue('ROLE_EMAIL_VALIDATED')
-            ->end()
-        ;
+            ->defaultValue('ROLE_EMAIL_VALIDATED')
+            ->end();
         return $builder;
     }
 }

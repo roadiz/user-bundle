@@ -65,9 +65,9 @@ final class UserPasswordTokenInputDataTransformer implements DataTransformerInte
         }
 
         if (
-            $user->isEnabled() &&
-            $user->isAccountNonExpired() &&
-            $user->isAccountNonLocked()
+            $user->isEnabled()
+            && $user->isAccountNonExpired()
+            && $user->isAccountNonLocked()
         ) {
             $expiresAt = clone $user->getPasswordRequestedAt();
             $expiresAt->add(new \DateInterval(sprintf('PT%dS', $this->passwordResetExpiresIn)));
