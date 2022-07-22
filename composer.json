@@ -34,7 +34,12 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": false,
+            "symfony/runtime": true,
+            "composer/package-versions-deprecated": true
+        }
     },
     "autoload": {
         "psr-4": {
