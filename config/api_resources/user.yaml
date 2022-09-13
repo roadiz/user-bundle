@@ -2,6 +2,10 @@
 RZ\Roadiz\CoreBundle\Entity\User:
     iri: User
     shortName: User
+    attributes:
+        cache_headers:
+            public: false
+            max_age: 0
     collectionOperations:
         signup:
             method: 'POST'
