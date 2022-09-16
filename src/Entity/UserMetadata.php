@@ -22,14 +22,14 @@ class UserMetadata
     private int $id;
 
     /**
-     * @var                                                           User|null
+     * @var User|null
      * @ORM\OneToOne(targetEntity="RZ\Roadiz\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id",                                nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id", nullable=true, onDelete="CASCADE")
      */
     private ?User $user = null;
 
     /**
-     * @var                     array|null
+     * @var array|null
      * @ORM\Column(type="json", nullable=true, name="metadata")
      */
     private ?array $metadata = [];
