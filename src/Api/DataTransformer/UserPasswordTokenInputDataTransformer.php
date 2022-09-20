@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace RZ\Roadiz\UserBundle\Api\DataTransformer;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
-use ApiPlatform\Validator\ValidatorInterface;
+use ApiPlatform\Core\Validator\ValidatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use RZ\Roadiz\CoreBundle\Entity\User;
 use RZ\Roadiz\UserBundle\Api\Dto\UserPasswordTokenInput;

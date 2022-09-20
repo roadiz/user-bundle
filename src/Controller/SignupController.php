@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RZ\Roadiz\UserBundle\Controller;
 
-use ApiPlatform\Validator\ValidatorInterface;
+use ApiPlatform\Core\Validator\ValidatorInterface;
 use RZ\Roadiz\CoreBundle\Bag\Settings;
 use RZ\Roadiz\CoreBundle\Entity\User;
 use RZ\Roadiz\CoreBundle\Form\Constraint\RecaptchaServiceInterface;
