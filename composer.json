@@ -17,8 +17,8 @@
     "type": "symfony-bundle",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.4",
-        "api-platform/core": "~2.6.8",
+        "php": ">=8.0",
+        "api-platform/core": "~2.7.0",
         "symfony/framework-bundle": "5.4.*",
         "symfony/rate-limiter": "5.4.*",
         "doctrine/orm": "^2.12.2"
