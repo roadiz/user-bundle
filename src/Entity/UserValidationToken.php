@@ -8,35 +8,33 @@ use Doctrine\ORM\Mapping as ORM;
 use RZ\Roadiz\CoreBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @UniqueEntity("token")
- * @ORM\Entity(repositoryClass="RZ\Roadiz\UserBundle\Repository\UserValidationTokenRepository")
- * @ORM\Table(name="user_validation_tokens")
- */
+#[ORM\Table(name: 'user_validation_tokens')]
+#[UniqueEntity('token')]
+#[ORM\Entity(repositoryClass: 'RZ\Roadiz\UserBundle\Repository\UserValidationTokenRepository')]
 class UserValidationToken
 {
     /**
      * @var int
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue
-     * @ORM\Id
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\GeneratedValue]
+    #[ORM\Id]
     private int $id;
     /**
      * @var User|null
-     * @ORM\ManyToOne(targetEntity="RZ\Roadiz\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=true, onDelete="CASCADE")
      */
+    #[ORM\ManyToOne(targetEntity: 'RZ\Roadiz\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'user_id', nullable: true, onDelete: 'CASCADE')]
     private ?User $user = null;
     /**
      * @var string
-     * @ORM\Column(name="token", type="string", nullable=false, unique=true)
      */
+    #[ORM\Column(name: 'token', type: 'string', nullable: false, unique: true)]
     private string $token;
     /**
      * @var \DateTime|null
-     * @ORM\Column(name="token_valid_until", type="datetime", nullable=true, unique=false)
      */
+    #[ORM\Column(name: 'token_valid_until', type: 'datetime', nullable: true, unique: false)]
     private ?\DateTime $tokenValidUntil = null;
 
     /**

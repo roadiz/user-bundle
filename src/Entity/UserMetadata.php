@@ -7,31 +7,29 @@ namespace RZ\Roadiz\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use RZ\Roadiz\CoreBundle\Entity\User;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="user_metadata")
- */
+#[ORM\Table(name: 'user_metadata')]
+#[ORM\Entity]
 class UserMetadata
 {
     /**
      * @var                   int
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue
-     * @ORM\Id
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\GeneratedValue]
+    #[ORM\Id]
     private int $id;
 
     /**
      * @var User|null
-     * @ORM\OneToOne(targetEntity="RZ\Roadiz\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=true, onDelete="CASCADE")
      */
+    #[ORM\OneToOne(targetEntity: 'RZ\Roadiz\CoreBundle\Entity\User')]
+    #[ORM\JoinColumn(name: 'user_id', nullable: true, onDelete: 'CASCADE')]
     private ?User $user = null;
 
     /**
      * @var array|null
-     * @ORM\Column(type="json", nullable=true, name="metadata")
      */
+    #[ORM\Column(type: 'json', nullable: true, name: 'metadata')]
     private ?array $metadata = [];
 
     /**
