@@ -39,6 +39,7 @@ final class UserOutputDataTransformer implements DataTransformerInterface
         $userOutput->roles = array_values($object->getRoles());
 
         if ($object instanceof AbstractHuman) {
+            $userOutput->publicName = $object->getPublicName();
             $userOutput->firstName = $object->getFirstName();
             $userOutput->lastName = $object->getLastName();
             $userOutput->phone = $object->getPhone();
