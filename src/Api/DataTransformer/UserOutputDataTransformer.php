@@ -50,9 +50,10 @@ final class UserOutputDataTransformer implements DataTransformerInterface
         if ($object instanceof User) {
             $userOutput->locale = $object->getLocale();
             $userOutput->pictureUrl = $object->getPictureUrl();
-        }
-        if (null !== $userMetadata = $this->userMetadataManager->getMetadataForUser($object)) {
-            $userOutput->metadata = $userMetadata->getMetadata();
+
+            if (null !== $userMetadata = $this->userMetadataManager->getMetadataForUser($object)) {
+                $userOutput->metadata = $userMetadata->getMetadata();
+            }
         }
 
         $userOutput->emailValidated = $this->userValidationTokenManager->isUserEmailValidated($object);
