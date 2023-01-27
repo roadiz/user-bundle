@@ -24,7 +24,7 @@
         "doctrine/orm": "^2.12.2"
     },
     "require-dev": {
-        "roadiz/core-bundle": "*",
+        "roadiz/core-bundle": "~2.1.0 || dev-develop",
         "php-coveralls/php-coveralls": "^2.4",
         "phpstan/phpstan": "^1.5.3",
         "squizlabs/php_codesniffer": "^3.5",
