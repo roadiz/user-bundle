@@ -1,6 +1,8 @@
 # Roadiz User bundle
 **Public user management bundle for Roadiz v2**
 
+![Run test status](https://github.com/roadiz/user-bundle/actions/workflows/run-test.yml/badge.svg?branch=develop)
+
 Installation
 ============
 
