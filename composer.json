@@ -21,7 +21,7 @@
         "api-platform/core": "~2.7.0",
         "symfony/framework-bundle": "5.4.*",
         "symfony/rate-limiter": "5.4.*",
-        "doctrine/orm": "^2.12.2"
+        "doctrine/orm": "^2.14.1"
     },
     "require-dev": {
         "roadiz/core-bundle": "~2.1.0 || dev-develop",
@@ -39,12 +39,18 @@
         "allow-plugins": {
             "symfony/flex": false,
             "symfony/runtime": true,
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "php-http/discovery": false
         }
     },
     "autoload": {
         "psr-4": {
             "RZ\\Roadiz\\UserBundle\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "2.1-dev"
         }
     }
 }
