@@ -8,6 +8,7 @@ final class UserInput
 {
     public string $email = '';
     public string $plainPassword = '';
+    public ?string $publicName = null;
     public ?string $firstName = null;
     public ?string $lastName = null;
     public ?string $phone = null;

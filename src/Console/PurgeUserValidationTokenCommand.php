@@ -21,7 +21,7 @@ final class PurgeUserValidationTokenCommand extends Command
         $this->managerRegistry = $managerRegistry;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('users:purge-validation-tokens')

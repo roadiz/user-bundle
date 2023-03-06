@@ -1,6 +1,8 @@
 # Roadiz User bundle
 **Public user management bundle for Roadiz v2**
 
+![Run test status](https://github.com/roadiz/user-bundle/actions/workflows/run-test.yml/badge.svg?branch=develop)
+
 Installation
 ============
 
@@ -106,3 +108,7 @@ nelmio_cors:
 ## Maintenance commands
 
 - `bin/console users:purge-validation-tokens`: Delete all expired user validation tokens
+
+## Contributing
+
+Report [issues](https://github.com/roadiz/core-bundle-dev-app/issues) and send [Pull Requests](https://github.com/roadiz/core-bundle-dev-app/pulls) in the [main Roadiz repository](https://github.com/roadiz/core-bundle-dev-app)

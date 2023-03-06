@@ -17,14 +17,14 @@
     "type": "symfony-bundle",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.4",
-        "api-platform/core": "~2.6.8",
+        "php": ">=8.0",
+        "api-platform/core": "~2.7.0",
         "symfony/framework-bundle": "5.4.*",
         "symfony/rate-limiter": "5.4.*",
-        "doctrine/orm": "^2.12.2"
+        "doctrine/orm": "^2.14.1"
     },
     "require-dev": {
-        "roadiz/core-bundle": "*",
+        "roadiz/core-bundle": "^2.2",
         "php-coveralls/php-coveralls": "^2.4",
         "phpstan/phpstan": "^1.5.3",
         "squizlabs/php_codesniffer": "^3.5",
@@ -39,12 +39,19 @@
         "allow-plugins": {
             "symfony/flex": false,
             "symfony/runtime": true,
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "php-http/discovery": false
         }
     },
     "autoload": {
         "psr-4": {
             "RZ\\Roadiz\\UserBundle\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "2.0.x-dev",
+            "dev-develop": "2.2.x-dev"
         }
     }
 }

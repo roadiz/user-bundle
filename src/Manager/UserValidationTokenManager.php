@@ -87,7 +87,8 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
 
     private function sendUserValidationEmail(UserValidationToken $userValidationToken): void
     {
-        $emailContact = $this->settingsBag->get('email_sender');
+        $emailContact = $this->settingsBag->get('support_email_address', null) ??
+            $this->settingsBag->get('email_sender', null);
         $siteName = $this->settingsBag->get('site_name');
 
         /*
@@ -97,26 +98,26 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
             $validationLink = $this->urlGenerator->generate(
                 $this->userValidationUrl,
                 [
-                'token' => $userValidationToken->getToken(),
-                '_locale' => null !== $userValidationToken->getUser() ? $userValidationToken->getUser()->getLocale() : null,
+                    'token' => $userValidationToken->getToken(),
+                    '_locale' => $userValidationToken->getUser()?->getLocale(),
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
         } catch (RouteNotFoundException $exception) {
             $validationLink = $this->userValidationUrl . '?' . http_build_query(
                 [
-                'token' => $userValidationToken->getToken(),
-                '_locale' => null !== $userValidationToken->getUser() ? $userValidationToken->getUser()->getLocale() : null,
+                    'token' => $userValidationToken->getToken(),
+                    '_locale' => $userValidationToken->getUser()?->getLocale(),
                 ]
             );
         }
 
         $this->emailManager->setAssignation(
             [
-            'validationLink' => $validationLink,
-            'user' => $userValidationToken->getUser(),
-            'site' => $siteName,
-            'mailContact' => $emailContact,
+                'validationLink' => $validationLink,
+                'user' => $userValidationToken->getUser(),
+                'site' => $siteName,
+                'mailContact' => $emailContact,
             ]
         );
         $this->emailManager->setEmailTemplate('@RoadizUser/email/users/validate_email.html.twig');

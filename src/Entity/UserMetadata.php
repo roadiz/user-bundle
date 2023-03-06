@@ -7,43 +7,32 @@ namespace RZ\Roadiz\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use RZ\Roadiz\CoreBundle\Entity\User;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="user_metadata")
- */
+#[ORM\Table(name: 'user_metadata')]
+#[ORM\Entity]
 class UserMetadata
 {
-    /**
-     * @var                   int
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue
-     * @ORM\Id
-     */
-    private int $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\GeneratedValue]
+    #[ORM\Id]
+    private ?int $id = null;
 
-    /**
-     * @var User|null
-     * @ORM\OneToOne(targetEntity="RZ\Roadiz\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=true, onDelete="CASCADE")
-     */
+    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', nullable: true, onDelete: 'CASCADE')]
     private ?User $user = null;
 
-    /**
-     * @var array|null
-     * @ORM\Column(type="json", nullable=true, name="metadata")
-     */
+    #[ORM\Column(name: 'metadata', type: 'json', nullable: true)]
     private ?array $metadata = [];
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param  int $id
+     * @param int $id
      * @return UserMetadata
      */
     public function setId(int $id): UserMetadata
