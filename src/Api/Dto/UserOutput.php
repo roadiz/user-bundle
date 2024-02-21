@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace RZ\Roadiz\UserBundle\Api\Dto;
 
-use ApiPlatform\Metadata\ApiProperty;
-
 final class UserOutput
 {
     public string $identifier = '';
