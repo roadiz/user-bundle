@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RZ\Roadiz\UserBundle\Api\Dto;
 
-final class UserValidationRequestInput
+final class UserTokenInput
 {
-    public string $identifier = '';
+    public string $token = '';
 }

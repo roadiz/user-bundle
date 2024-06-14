@@ -55,7 +55,7 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
         $this->emailValidatedRoleName = $emailValidatedRoleName;
     }
 
-    public function createForUser(UserInterface $user): UserValidationToken
+    public function createForUser(User $user): UserValidationToken
     {
         $existingValidationToken = $this->managerRegistry
             ->getRepository(UserValidationToken::class)
@@ -91,12 +91,6 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
             $this->settingsBag->get('email_sender', null);
         $siteName = $this->settingsBag->get('site_name');
 
-        $user = $userValidationToken->getUser();
-
-        if (!($user instanceof User)) {
-            return;
-        }
-
         /*
          * Support routes name as well as hard-coded URLs
          */
@@ -105,7 +99,7 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
                 $this->userValidationUrl,
                 [
                     'token' => $userValidationToken->getToken(),
-                    '_locale' => $user->getLocale(),
+                    '_locale' => $userValidationToken->getUser()?->getLocale(),
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
@@ -113,7 +107,7 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
             $validationLink = $this->userValidationUrl . '?' . http_build_query(
                 [
                     'token' => $userValidationToken->getToken(),
-                    '_locale' => $user->getLocale(),
+                    '_locale' => $userValidationToken->getUser()?->getLocale(),
                 ]
             );
         }
@@ -121,7 +115,7 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
         $this->emailManager->setAssignation(
             [
                 'validationLink' => $validationLink,
-                'user' => $user,
+                'user' => $userValidationToken->getUser(),
                 'site' => $siteName,
                 'mailContact' => $emailContact,
             ]
@@ -133,7 +127,7 @@ final class UserValidationTokenManager implements UserValidationTokenManagerInte
                 'validate_email.subject'
             )
         );
-        $this->emailManager->setReceiver($user->getEmail());
+        $this->emailManager->setReceiver($userValidationToken->getUser()->getEmail());
         $this->emailManager->setSender(new Address($emailContact, $siteName ?? ''));
         $this->emailManager->send();
     }
