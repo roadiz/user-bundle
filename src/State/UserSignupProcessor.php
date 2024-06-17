@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class UserSignupProcessor implements ProcessorInterface
@@ -51,7 +51,7 @@ final class UserSignupProcessor implements ProcessorInterface
         return $this->recaptchaHeaderName;
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserInput) {
             throw new BadRequestHttpException(sprintf('Cannot process %s', get_class($data)));
