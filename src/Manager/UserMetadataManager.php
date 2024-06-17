@@ -10,8 +10,14 @@ use RZ\Roadiz\UserBundle\Entity\UserMetadata;
 
 class UserMetadataManager implements UserMetadataManagerInterface
 {
-    public function __construct(private readonly ManagerRegistry $managerRegistry)
+    private ManagerRegistry $managerRegistry;
+
+    /**
+     * @param ManagerRegistry $managerRegistry
+     */
+    public function __construct(ManagerRegistry $managerRegistry)
     {
+        $this->managerRegistry = $managerRegistry;
     }
 
     public function getMetadataForUser(User $user): ?UserMetadata
