@@ -59,7 +59,7 @@ final class UserPasswordRequestProcessor implements ProcessorInterface
         return $this->recaptchaHeaderName;
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserPasswordRequestInput) {
             throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));
