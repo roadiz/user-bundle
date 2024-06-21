@@ -14,7 +14,7 @@ use RZ\Roadiz\UserBundle\Api\Dto\VoidOutput;
 use RZ\Roadiz\UserBundle\Manager\UserValidationTokenManagerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class UserValidationRequestProcessor implements ProcessorInterface
 {
@@ -27,7 +27,7 @@ final class UserValidationRequestProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserValidationRequestInput) {
             throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));
