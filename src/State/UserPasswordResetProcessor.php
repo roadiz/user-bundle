@@ -31,7 +31,7 @@ final class UserPasswordResetProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserPasswordTokenInput) {
             throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));

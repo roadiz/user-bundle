@@ -15,7 +15,7 @@ use RZ\Roadiz\UserBundle\Entity\UserValidationToken;
 use RZ\Roadiz\UserBundle\Event\UserEmailValidated;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class UserValidationTokenProcessor implements ProcessorInterface
@@ -29,7 +29,7 @@ final class UserValidationTokenProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserValidationTokenInput) {
             throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));
