@@ -59,7 +59,7 @@ final class UserPasswordRequestProcessor implements ProcessorInterface
         return $this->recaptchaHeaderName;
     }
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserPasswordRequestInput) {
             throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));
@@ -123,7 +123,6 @@ final class UserPasswordRequestProcessor implements ProcessorInterface
 
     private function sendPasswordResetLink(Request $request, User $user): void
     {
-        $emailManager = $this->emailManagerFactory->create();
         $emailContact = $this->settingsBag->get('email_sender');
         $siteName = $this->settingsBag->get('site_name');
 
@@ -147,7 +146,7 @@ final class UserPasswordRequestProcessor implements ProcessorInterface
                     ]
             );
         }
-
+        $emailManager = $this->emailManagerFactory->create();
         $emailManager->setAssignation(
             [
                 'resetLink' => $resetLink,
