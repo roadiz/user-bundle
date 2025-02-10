@@ -2,7 +2,7 @@
 parameters:
     env(USER_PASSWORD_RESET_URL): 'loginResetPage'
     env(USER_VALIDATION_URL): 'http://example.test/my-account/validate'
-    env(USER_PASSWORD_RESET_EXPIRES_IN): '900'
+    env(USER_PASSWORD_RESET_EXPIRES_IN): '600'
     env(USER_VALIDATION_EXPIRES_IN): '3600'
 
 services:
@@ -16,9 +16,7 @@ services:
             $passwordResetExpiresIn: '%roadiz_user.password_reset_expires_in%'
             $userValidationExpiresIn: '%roadiz_user.user_validation_expires_in%'
             $publicUserRoleName: '%roadiz_user.public_user_role_name%'
-            $passwordlessUserRoleName: '%roadiz_user.passwordless_user_role_name%'
             $emailValidatedRoleName: '%roadiz_user.email_validated_role_name%'
-            $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 
     RZ\Roadiz\UserBundle\:
         resource: '../src/'
@@ -27,10 +25,7 @@ services:
             - '../src/Entity/'
             - '../src/Tests/'
             - '../src/Event/'
-            - '../src/Security/'
 
-    RZ\Roadiz\UserBundle\State\UserSignupProcessor:
-        tags: [ 'api_platform.state_processor' ]
-
-    RZ\Roadiz\UserBundle\State\PasswordlessUserSignupProcessor:
-        tags: [ 'api_platform.state_processor' ]
+    RZ\Roadiz\UserBundle\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
