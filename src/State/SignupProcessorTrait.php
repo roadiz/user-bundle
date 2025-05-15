@@ -41,7 +41,10 @@ trait SignupProcessorTrait
         $user->setFirstName($data->firstName);
         $user->setLastName($data->lastName);
         $user->setPublicName($data->publicName);
+        $user->setPhone($data->phone);
         $user->setCompany($data->company);
+        $user->setJob($data->job);
+        $user->setBirthday($data->birthday);
 
         return $user;
     }
