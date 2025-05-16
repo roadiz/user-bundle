@@ -13,9 +13,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class PurgeUserValidationTokenCommand extends Command
 {
-    public function __construct(private readonly ManagerRegistry $managerRegistry, ?string $name = null)
+    private ManagerRegistry $managerRegistry;
+
+    public function __construct(ManagerRegistry $managerRegistry, string $name = null)
     {
         parent::__construct($name);
+        $this->managerRegistry = $managerRegistry;
     }
 
     protected function configure(): void
@@ -32,7 +35,6 @@ final class PurgeUserValidationTokenCommand extends Command
         $count = $this->managerRegistry->getRepository(UserValidationToken::class)->deleteAllExpired();
 
         $io->success(sprintf('%d expired user validation token(s) were deleted.', $count));
-
         return 0;
     }
 }
