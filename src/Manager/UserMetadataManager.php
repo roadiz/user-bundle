@@ -8,16 +8,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use RZ\Roadiz\CoreBundle\Entity\User;
 use RZ\Roadiz\UserBundle\Entity\UserMetadata;
 
-class UserMetadataManager implements UserMetadataManagerInterface
+readonly class UserMetadataManager implements UserMetadataManagerInterface
 {
-    private ManagerRegistry $managerRegistry;
-
-    /**
-     * @param ManagerRegistry $managerRegistry
-     */
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(private ManagerRegistry $managerRegistry)
     {
-        $this->managerRegistry = $managerRegistry;
     }
 
     public function getMetadataForUser(User $user): ?UserMetadata
@@ -30,6 +24,7 @@ class UserMetadataManager implements UserMetadataManagerInterface
         $userMetadata = new UserMetadata();
         $userMetadata->setUser($user);
         $this->managerRegistry->getManager()->persist($userMetadata);
+
         return $userMetadata;
     }
 }
