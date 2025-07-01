@@ -11,7 +11,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 trait RecaptchaProtectedTrait
 {
     abstract protected function getRecaptchaHeaderName(): string;
-
     abstract protected function getRecaptchaService(): RecaptchaServiceInterface;
 
     protected function validateRecaptchaHeader(Request $request): void
@@ -22,11 +21,11 @@ trait RecaptchaProtectedTrait
         }
         if (true !== $response = $this->getRecaptchaService()->check($responseValue)) {
             if (\is_string($response)) {
-                throw new BadRequestHttpException($this->getRecaptchaHeaderName().': '.$response);
+                throw new BadRequestHttpException($this->getRecaptchaHeaderName() . ': ' . $response);
             } elseif (\is_array($response)) {
-                throw new BadRequestHttpException($this->getRecaptchaHeaderName().': '.reset($response));
+                throw new BadRequestHttpException($this->getRecaptchaHeaderName() . ': ' . reset($response));
             }
-            throw new BadRequestHttpException($this->getRecaptchaHeaderName().': Recaptcha response is not valid.');
+            throw new BadRequestHttpException($this->getRecaptchaHeaderName() . ': Recaptcha response is not valid.');
         }
     }
 }
