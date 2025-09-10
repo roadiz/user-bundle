@@ -10,13 +10,13 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
-use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 trait SignupProcessorTrait
 {
     abstract protected function getSecurity(): Security;
 
-    abstract protected function getUserSignupLimiter(): RateLimiterFactoryInterface;
+    abstract protected function getUserSignupLimiter(): RateLimiterFactory;
 
     protected function validateRequest(?Request $request): void
     {
@@ -41,7 +41,10 @@ trait SignupProcessorTrait
         $user->setFirstName($data->firstName);
         $user->setLastName($data->lastName);
         $user->setPublicName($data->publicName);
+        $user->setPhone($data->phone);
         $user->setCompany($data->company);
+        $user->setJob($data->job);
+        $user->setBirthday($data->birthday);
 
         return $user;
     }

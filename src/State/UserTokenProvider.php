@@ -24,7 +24,6 @@ final readonly class UserTokenProvider implements ProviderInterface
     ) {
     }
 
-    #[\Override]
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): UserOutput
     {
         $user = $this->security->getUser();
@@ -40,7 +39,10 @@ final readonly class UserTokenProvider implements ProviderInterface
             $userOutput->publicName = $user->getPublicName();
             $userOutput->firstName = $user->getFirstName();
             $userOutput->lastName = $user->getLastName();
+            $userOutput->phone = $user->getPhone();
             $userOutput->company = $user->getCompany();
+            $userOutput->job = $user->getJob();
+            $userOutput->birthday = $user->getBirthday();
         }
         if ($user instanceof User) {
             $userOutput->locale = $user->getLocale();
