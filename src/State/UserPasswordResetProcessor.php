@@ -15,26 +15,27 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 
 /*
  * Process a user password reset token into a new password.
  */
-final class UserPasswordResetProcessor implements ProcessorInterface
+final readonly class UserPasswordResetProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly ManagerRegistry $managerRegistry,
-        private readonly ValidatorInterface $validator,
-        private readonly RateLimiterFactory $passwordResetLimiter,
-        private readonly RequestStack $requestStack,
-        private readonly int $passwordResetExpiresIn
+        private ManagerRegistry $managerRegistry,
+        private ValidatorInterface $validator,
+        private RateLimiterFactoryInterface $passwordResetLimiter,
+        private RequestStack $requestStack,
+        private int $passwordResetExpiresIn,
     ) {
     }
 
+    #[\Override]
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserPasswordTokenInput) {
-            throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));
+            throw new \RuntimeException(sprintf('Cannot process %s', $data::class));
         }
 
         $user = $this->managerRegistry
