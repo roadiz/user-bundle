@@ -15,7 +15,6 @@ final readonly class UserSignedUpSubscriber implements EventSubscriberInterface
     ) {
     }
 
-    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [
