@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 /*
  * Process a user password reset token into a new password.
@@ -25,17 +25,16 @@ final readonly class UserPasswordResetProcessor implements ProcessorInterface
     public function __construct(
         private ManagerRegistry $managerRegistry,
         private ValidatorInterface $validator,
-        private RateLimiterFactoryInterface $passwordResetLimiter,
+        private RateLimiterFactory $passwordResetLimiter,
         private RequestStack $requestStack,
         private int $passwordResetExpiresIn,
     ) {
     }
 
-    #[\Override]
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserPasswordTokenInput) {
-            throw new \RuntimeException(sprintf('Cannot process %s', $data::class));
+            throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));
         }
 
         $user = $this->managerRegistry
@@ -63,12 +62,7 @@ final readonly class UserPasswordResetProcessor implements ProcessorInterface
             throw new UnprocessableEntityHttpException('User is disabled, locked or expired.');
         }
 
-        $passwordRequestedAt = $user->getPasswordRequestedAt();
-        if (null === $passwordRequestedAt) {
-            throw new UnprocessableEntityHttpException('Token is not valid anymore.');
-        }
-
-        $expiresAt = clone $passwordRequestedAt;
+        $expiresAt = clone $user->getPasswordRequestedAt();
         $expiresAt->add(new \DateInterval(sprintf('PT%dS', $this->passwordResetExpiresIn)));
 
         if ($expiresAt <= new \DateTime()) {
