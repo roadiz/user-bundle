@@ -79,9 +79,7 @@ final readonly class PasswordlessUserSignupProcessor implements ProcessorInterfa
          * We don't want to send an email right now, we will send a login link instead.
          */
         $user->sendCreationConfirmationEmail(false);
-        if (null !== $request?->getLocale()) {
-            $user->setLocale($request->getLocale());
-        }
+        $user->setLocale($request->getLocale());
 
         $this->validator->validate($user);
 

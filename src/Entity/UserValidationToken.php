@@ -33,7 +33,7 @@ class UserValidationToken
 
     public function getId(): int
     {
-        return $this->id ?? throw new \LogicException('Id is not set yet.');
+        return $this->id;
     }
 
     public function setId(int $id): UserValidationToken
