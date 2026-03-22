@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace RZ\Roadiz\UserBundle\EventSubscriber;
 
-use RZ\Roadiz\UserBundle\Event\UserSignedUp;
+use RZ\Roadiz\UserBundle\Event\PasswordlessUserSignedUp;
 use RZ\Roadiz\UserBundle\Manager\UserValidationTokenManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final readonly class UserSignedUpSubscriber implements EventSubscriberInterface
+final readonly class PasswordlessUserSignedUpSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private UserValidationTokenManagerInterface $userValidationTokenManager,
@@ -19,13 +19,13 @@ final readonly class UserSignedUpSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            UserSignedUp::class => 'onUserSignedUp',
+            PasswordlessUserSignedUp::class => 'onUserSignedUp',
         ];
     }
 
-    public function onUserSignedUp(UserSignedUp $event): void
+    public function onUserSignedUp(PasswordlessUserSignedUp $event): void
     {
         $user = $event->getUser();
-        $this->userValidationTokenManager->createForUser($user);
+        $this->userValidationTokenManager->createForUser($user, false);
     }
 }
