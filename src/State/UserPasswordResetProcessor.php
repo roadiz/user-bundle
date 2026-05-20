@@ -63,12 +63,7 @@ final readonly class UserPasswordResetProcessor implements ProcessorInterface
             throw new UnprocessableEntityHttpException('User is disabled, locked or expired.');
         }
 
-        $passwordRequestedAt = $user->getPasswordRequestedAt();
-        if (null === $passwordRequestedAt) {
-            throw new UnprocessableEntityHttpException('Token is not valid anymore.');
-        }
-
-        $expiresAt = clone $passwordRequestedAt;
+        $expiresAt = clone $user->getPasswordRequestedAt();
         $expiresAt->add(new \DateInterval(sprintf('PT%dS', $this->passwordResetExpiresIn)));
 
         if ($expiresAt <= new \DateTime()) {
