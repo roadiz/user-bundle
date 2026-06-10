@@ -12,11 +12,8 @@ trait CaptchaProtectedTrait
 {
     abstract protected function getCaptchaService(): CaptchaServiceInterface;
 
-    protected function validateCaptchaHeader(?Request $request): void
+    protected function validateCaptchaHeader(Request $request): void
     {
-        if (null === $request) {
-            throw new BadRequestHttpException('No request available to validate captcha.');
-        }
         /*
          * Generate a header name based on the captcha service field name.
          * x-g-recaptcha-response, x-frc-captcha-response for example.
