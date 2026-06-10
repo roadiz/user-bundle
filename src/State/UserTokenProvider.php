@@ -24,7 +24,6 @@ final readonly class UserTokenProvider implements ProviderInterface
     ) {
     }
 
-    #[\Override]
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): UserOutput
     {
         $user = $this->security->getUser();
