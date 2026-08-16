@@ -9,8 +9,8 @@ use ApiPlatform\State\ProcessorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use RZ\Roadiz\CoreBundle\Bag\Settings;
+use RZ\Roadiz\CoreBundle\Captcha\CaptchaServiceInterface;
 use RZ\Roadiz\CoreBundle\Entity\User;
-use RZ\Roadiz\CoreBundle\Form\Constraint\RecaptchaServiceInterface;
 use RZ\Roadiz\CoreBundle\Mailer\EmailManagerFactory;
 use RZ\Roadiz\CoreBundle\Security\User\UserProvider;
 use RZ\Roadiz\Random\TokenGenerator;
@@ -29,34 +29,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Process a user identifier into a password request.
  */
-final class UserPasswordRequestProcessor implements ProcessorInterface
+final readonly class UserPasswordRequestProcessor implements ProcessorInterface
 {
-    use RecaptchaProtectedTrait;
+    use CaptchaProtectedTrait;
 
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly RateLimiterFactory $passwordRequestLimiter,
-        private readonly ManagerRegistry $managerRegistry,
-        private readonly RequestStack $requestStack,
-        private readonly UserProvider $userProvider,
-        private readonly EmailManagerFactory $emailManagerFactory,
-        private readonly Settings $settingsBag,
-        private readonly TranslatorInterface $translator,
-        private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly RecaptchaServiceInterface $recaptchaService,
-        private readonly string $passwordResetUrl,
-        private readonly string $recaptchaHeaderName = 'x-g-recaptcha-response'
+        private LoggerInterface $logger,
+        private RateLimiterFactory $passwordRequestLimiter,
+        private ManagerRegistry $managerRegistry,
+        private RequestStack $requestStack,
+        private UserProvider $userProvider,
+        private EmailManagerFactory $emailManagerFactory,
+        private Settings $settingsBag,
+        private TranslatorInterface $translator,
+        private UrlGeneratorInterface $urlGenerator,
+        private CaptchaServiceInterface $recaptchaService,
+        private string $passwordResetUrl,
     ) {
     }
 
-    protected function getRecaptchaService(): RecaptchaServiceInterface
+    protected function getCaptchaService(): CaptchaServiceInterface
     {
         return $this->recaptchaService;
-    }
-
-    protected function getRecaptchaHeaderName(): string
-    {
-        return $this->recaptchaHeaderName;
     }
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
@@ -74,7 +68,7 @@ final class UserPasswordRequestProcessor implements ProcessorInterface
             throw new TooManyRequestsHttpException($limit->getRetryAfter()->getTimestamp());
         }
 
-        $this->validateRecaptchaHeader($request);
+        $this->validateCaptchaHeader($request);
 
         $user = $this->getUser($data->identifier);
 
@@ -118,6 +112,7 @@ final class UserPasswordRequestProcessor implements ProcessorInterface
             }
         } catch (AuthenticationException $exception) {
         }
+
         return null;
     }
 
@@ -140,11 +135,11 @@ final class UserPasswordRequestProcessor implements ProcessorInterface
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
         } catch (RouteNotFoundException $exception) {
-            $resetLink = $this->passwordResetUrl . '?' . http_build_query(
+            $resetLink = $this->passwordResetUrl.'?'.http_build_query(
                 [
-                        'token' => $user->getConfirmationToken(),
-                        '_locale' => $request->getLocale(),
-                    ]
+                    'token' => $user->getConfirmationToken(),
+                    '_locale' => $request->getLocale(),
+                ]
             );
         }
 
