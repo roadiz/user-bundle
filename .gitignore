@@ -118,5 +118,9 @@ modules.xml
 /lib/
 /.data/
 
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
 /report.txt
 /composer.lock
