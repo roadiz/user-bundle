@@ -8,16 +8,21 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
+use RZ\Roadiz\CoreBundle\Bag\Settings;
 use RZ\Roadiz\CoreBundle\Captcha\CaptchaServiceInterface;
 use RZ\Roadiz\CoreBundle\Entity\User;
+use RZ\Roadiz\CoreBundle\Mailer\EmailManagerFactory;
 use RZ\Roadiz\CoreBundle\Security\User\UserProvider;
 use RZ\Roadiz\Random\TokenGenerator;
 use RZ\Roadiz\UserBundle\Api\Dto\UserPasswordRequestInput;
 use RZ\Roadiz\UserBundle\Api\Dto\VoidOutput;
-use RZ\Roadiz\UserBundle\Notifier\PasswordResetLinkNotifier;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
-use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -30,28 +35,28 @@ final readonly class UserPasswordRequestProcessor implements ProcessorInterface
 
     public function __construct(
         private LoggerInterface $logger,
-        private RateLimiterFactoryInterface $passwordRequestLimiter,
-        private RateLimiterFactoryInterface $passwordRequestEmailLimiter,
+        private RateLimiterFactory $passwordRequestLimiter,
         private ManagerRegistry $managerRegistry,
         private RequestStack $requestStack,
         private UserProvider $userProvider,
-        private PasswordResetLinkNotifier $passwordResetLinkNotifier,
+        private EmailManagerFactory $emailManagerFactory,
+        private Settings $settingsBag,
         private TranslatorInterface $translator,
+        private UrlGeneratorInterface $urlGenerator,
         private CaptchaServiceInterface $recaptchaService,
+        private string $passwordResetUrl,
     ) {
     }
 
-    #[\Override]
     protected function getCaptchaService(): CaptchaServiceInterface
     {
         return $this->recaptchaService;
     }
 
-    #[\Override]
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserPasswordRequestInput) {
-            throw new \RuntimeException(sprintf('Cannot process %s', $data::class));
+            throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));
         }
         $request = $this->requestStack->getMainRequest();
         if (null === $request) {
@@ -60,15 +65,7 @@ final readonly class UserPasswordRequestProcessor implements ProcessorInterface
         $limiter = $this->passwordRequestLimiter->create($request->getClientIp());
         $limit = $limiter->consume();
         if (false === $limit->isAccepted()) {
-            throw new TooManyRequestsHttpException($limit->getRetryAfter()->getTimestamp() - time());
-        }
-
-        // Per-IP limiting alone lets an IP-rotating attacker flood a single
-        // victim's mailbox: also cap requests per targeted identifier.
-        $emailLimiter = $this->passwordRequestEmailLimiter->create(mb_strtolower(trim($data->identifier)));
-        $emailLimit = $emailLimiter->consume();
-        if (false === $emailLimit->isAccepted()) {
-            throw new TooManyRequestsHttpException($emailLimit->getRetryAfter()->getTimestamp() - time());
+            throw new TooManyRequestsHttpException($limit->getRetryAfter()->getTimestamp());
         }
 
         $this->validateCaptchaHeader($request);
@@ -84,13 +81,7 @@ final readonly class UserPasswordRequestProcessor implements ProcessorInterface
             $tokenGenerator = new TokenGenerator($this->logger);
             $user->setPasswordRequestedAt(new \DateTime());
             $user->setConfirmationToken($tokenGenerator->generateToken());
-            $this->passwordResetLinkNotifier->notify(
-                $user,
-                $request->getLocale(),
-                $this->translator->trans('reset.password.request', locale: $user->getLocale()),
-                '@RoadizUser/email/users/reset_password_email.html.twig',
-                '@RoadizUser/email/users/reset_password_email.txt.twig',
-            );
+            $this->sendPasswordResetLink($request, $user);
         } catch (\Exception $e) {
             $user->setPasswordRequestedAt(null);
             $user->setConfirmationToken(null);
@@ -119,9 +110,56 @@ final readonly class UserPasswordRequestProcessor implements ProcessorInterface
             ) {
                 return $user;
             }
-        } catch (AuthenticationException) {
+        } catch (AuthenticationException $exception) {
         }
 
         return null;
+    }
+
+    private function sendPasswordResetLink(Request $request, User $user): void
+    {
+        $emailManager = $this->emailManagerFactory->create();
+        $emailContact = $this->settingsBag->get('email_sender');
+        $siteName = $this->settingsBag->get('site_name');
+
+        /*
+         * Support routes name as well as hard-coded URLs
+         */
+        try {
+            $resetLink = $this->urlGenerator->generate(
+                $this->passwordResetUrl,
+                [
+                    'token' => $user->getConfirmationToken(),
+                    '_locale' => $request->getLocale(),
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        } catch (RouteNotFoundException $exception) {
+            $resetLink = $this->passwordResetUrl.'?'.http_build_query(
+                [
+                    'token' => $user->getConfirmationToken(),
+                    '_locale' => $request->getLocale(),
+                ]
+            );
+        }
+
+        $emailManager->setAssignation(
+            [
+                'resetLink' => $resetLink,
+                'user' => $user,
+                'site' => $siteName,
+                'mailContact' => $emailContact,
+            ]
+        );
+        $emailManager->setEmailTemplate('@RoadizUser/email/users/reset_password_email.html.twig');
+        $emailManager->setEmailPlainTextTemplate('@RoadizUser/email/users/reset_password_email.txt.twig');
+        $emailManager->setSubject(
+            $this->translator->trans(
+                'reset.password.request'
+            )
+        );
+        $emailManager->setReceiver($user->getEmail());
+        $emailManager->setSender(new Address($emailContact, $siteName ?? ''));
+        $emailManager->send();
     }
 }
