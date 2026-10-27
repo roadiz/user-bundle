@@ -8,18 +8,20 @@ use RZ\Roadiz\UserBundle\Event\UserSignedUp;
 use RZ\Roadiz\UserBundle\Manager\UserValidationTokenManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final readonly class UserSignedUpSubscriber implements EventSubscriberInterface
+final class UserSignedUpSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private UserValidationTokenManagerInterface $userValidationTokenManager,
+        private readonly UserValidationTokenManagerInterface $userValidationTokenManager
     ) {
     }
 
-    #[\Override]
+    /**
+     * @inheritDoc
+     */
     public static function getSubscribedEvents(): array
     {
         return [
-            UserSignedUp::class => 'onUserSignedUp',
+            UserSignedUp::class => 'onUserSignedUp'
         ];
     }
 
