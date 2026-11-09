@@ -27,11 +27,10 @@ final readonly class UserValidationRequestProcessor implements ProcessorInterfac
     ) {
     }
 
-    #[\Override]
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): VoidOutput
     {
         if (!$data instanceof UserValidationRequestInput) {
-            throw new \RuntimeException(sprintf('Cannot process %s', $data::class));
+            throw new \RuntimeException(sprintf('Cannot process %s', get_class($data)));
         }
 
         $user = $this->userProvider->loadUserByIdentifier($data->identifier);
@@ -40,7 +39,7 @@ final readonly class UserValidationRequestProcessor implements ProcessorInterfac
             throw new AccessDeniedHttpException('User must be logged in');
         }
 
-        if ($this->security->getUser()?->getUserIdentifier() !== $user->getUserIdentifier()) {
+        if ($this->security->getUser()->getUserIdentifier() !== $user->getUserIdentifier()) {
             throw new AccessDeniedHttpException('Only current user can request email validation');
         }
 
